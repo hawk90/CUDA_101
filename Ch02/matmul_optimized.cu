@@ -357,45 +357,45 @@ int main() {
                optCorrect ? "" : "[FAIL]");
         
         // cuBLAS comparison
-        cublasHandle_t handle;
-        cublasCreate(&handle);
+        // cublasHandle_t handle;
+        // cublasCreate(&handle);
         
-        const float alpha = 1.0f;
-        const float beta = 0.0f;
+        // const float alpha = 1.0f;
+        // const float beta = 0.0f;
         
-        cudaEvent_t start, stop;
-        CHECK_CUDA(cudaEventCreate(&start));
-        CHECK_CUDA(cudaEventCreate(&stop));
+        // cudaEvent_t start, stop;
+        // CHECK_CUDA(cudaEventCreate(&start));
+        // CHECK_CUDA(cudaEventCreate(&stop));
         
-        // Warm-up
-        cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N,
-                   N, M, K, &alpha, d_B, N, d_A, K, &beta, d_C, N);
+        // // Warm-up
+        // cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N,
+        //            N, M, K, &alpha, d_B, N, d_A, K, &beta, d_C, N);
         
-        CHECK_CUDA(cudaEventRecord(start));
-        for (int i = 0; i < 10; i++) {
-            cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N,
-                       N, M, K, &alpha, d_B, N, d_A, K, &beta, d_C, N);
-        }
-        CHECK_CUDA(cudaEventRecord(stop));
-        CHECK_CUDA(cudaEventSynchronize(stop));
+        // CHECK_CUDA(cudaEventRecord(start));
+        // for (int i = 0; i < 10; i++) {
+        //     cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N,
+        //                N, M, K, &alpha, d_B, N, d_A, K, &beta, d_C, N);
+        // }
+        // CHECK_CUDA(cudaEventRecord(stop));
+        // CHECK_CUDA(cudaEventSynchronize(stop));
         
-        float cublasTime = 0;
-        CHECK_CUDA(cudaEventElapsedTime(&cublasTime, start, stop));
-        cublasTime /= 10;
+        // float cublasTime = 0;
+        // CHECK_CUDA(cudaEventElapsedTime(&cublasTime, start, stop));
+        // cublasTime /= 10;
         
-        double cublasGflops = flops / (cublasTime * 1e6);
-        printf("%-25s %-12.3f %-12.2f %-12.2fx\n", 
-               "cuBLAS", cublasTime, cublasGflops, 
-               cpuTime > 0 ? cpuTime/cublasTime : 0);
+        // double cublasGflops = flops / (cublasTime * 1e6);
+        // printf("%-25s %-12.3f %-12.2f %-12.2fx\n", 
+        //        "cuBLAS", cublasTime, cublasGflops, 
+        //        cpuTime > 0 ? cpuTime/cublasTime : 0);
         
-        cublasDestroy(handle);
+        // cublasDestroy(handle);
         
         // Performance analysis
         printf("\nOptimization Impact:\n");
         printf("  Naive → Tiled: %.2fx speedup\n", naiveTime / tiledTime);
         printf("  Tiled → Optimized: %.2fx speedup\n", tiledTime / optTime);
-        printf("  Our best vs cuBLAS: %.1f%% efficiency\n", 
-               (cublasTime / optTime) * 100);
+        // printf("  Our best vs cuBLAS: %.1f%% efficiency\n", 
+        //        (cublasTime / optTime) * 100);
         
         // Memory bandwidth analysis
         float bandwidth = (sizeA + sizeB + sizeC) / (optTime * 1e6);  // GB/s
